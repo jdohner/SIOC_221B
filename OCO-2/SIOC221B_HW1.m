@@ -4,11 +4,12 @@
 %
 % First look at OCO-2 data
 
+% h5disp('oco2_LtCO2_140906_B7305Br_160713033252s.nc4');
+
 clear all;
 
-%A = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/xco2_raw');
-latData = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
-lonData = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
+lat = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
+lon = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
 
 % Column-averaged dry-air mole fraction of CO2 (includes bias correction)
 % units: ppm
@@ -16,32 +17,35 @@ lonData = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
 % a sounding. Those soundings that did not converge will not be present. 
 % These values have units of mol/mol. This can easily be converted to ppm 
 % by multiplying by 106.
-xco2Data = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2');
+xco2 = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2');
 
-lon = -180:0.001:180;
-lat = -90:0.001:90;
+%% TODO: stuck here. 
+% What I want to do is plot a meshgrid of all lat/lon points, then plot the
+% xco2 data I have (assuming that the datapoints in the 48,170-long vector
+% align with the corresponding lat and lon values (also 48,170-long
+% vectors)
+
+% open to other ideas on plotting
 
 
-lat2 = latData(1:1000);
-lon2 = lonData(1:1000);
-xco2Data2 = xco2Data(1:1000);
+% lonGrid = -180:0.001:180;
+% latGrid = -90:0.001:90;
+
+% truncating data to make smaller files
+lat2 = lat(1:1000);
+lon2 = lon(1:1000);
+xco2_2 = xco2(1:1000);
 
 % meshgrid of all lat values, lon values
 % then make colorbar for co2 value
 [X,Y] = meshgrid(-180:1:180);
 figure('name','3D Plot', 'NumberTitle','off')
-surfc(X, Y, xco2Data2)
+surfc(X, Y, xco2_2); % does xco2_2 here need to have lat and lon as first 2 columns?
 colorbar()
 axesm utm
 grid on
 hold on
 legend()
-
-theta = [-179:180];
-phi = [-89:90];
-obs % 360x180 2d array of data
-[lat_grid,lon_grid] = meshgrid(theta,phi); % should both be 360x180 to match data
-%load coast % loads lat and long variables that define the coastline
 
 
 % Notes from Dillon:
