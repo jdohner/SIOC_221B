@@ -14,6 +14,18 @@ lat = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
 lon = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/longitude');
 % Column-averaged dry-air CO2 mole frac (includes bias correction), in ppm
 xco2 = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2');
+windspeed = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/windspeed');
+tcwv = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/tcwv'); % total column water vapor
+
+for i = 1:length(windspeed)
+    if windspeed(i) == -999999;
+        windspeed(i) = NaN;
+    end
+    if tcwv(i) == -999999;
+        tcwv(i) = NaN;
+    end
+end
+
 
 
 figure
@@ -77,3 +89,36 @@ ylabel('\fontsize{12}probability')
 % The PDF tells me the mean, the variance, and the skewedness of the data.
 
 % calculating a joint PDF of two of the variables:
+
+X = windspeed;
+Y = xco2;
+
+MIN1 = min(X)
+
+MAX1 = max(X)
+
+MIN2 = min(Y)
+
+MAX2 = max(Y)
+
+x_axis = MIN1:1:MAX1; % Define edges of bins for x axis. Column vector
+y_axis = MIN2:1:MAX2; % Same for y axis
+
+%// Compute and plot pdf
+figure
+subplot(2,2,1)
+histogram2(X, Y, x_axis, y_axis, 'Normalization', 'pdf')
+
+%// Compute and plot cdf
+subplot(2,2,2)
+histogram2(X, Y, x_axis, y_axis, 'Normalization', 'cdf')
+
+figure
+subplot(2,2,3)
+histogram2(X, Y, x_axis, y_axis, 'Normalization', 'pdf')
+
+%// Compute and plot cdf
+subplot(2,2,4)
+histogram2(X, Y, x_axis, y_axis, 'Normalization', 'cdf')
+
+% calculate mean and moments of a few variables
