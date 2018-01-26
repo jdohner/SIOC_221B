@@ -101,13 +101,14 @@ MIN2 = min(Y)
 
 MAX2 = max(Y)
 
-x_axis = MIN1:1:MAX1; % Define edges of bins for x axis. Column vector
-y_axis = MIN2:1:MAX2; % Same for y axis
+%x_axis = MIN1:1:MAX1; % Define edges of bins for x axis. Column vector
+%y_axis = MIN2:1:MAX2; % Same for y axis
 
 %// Compute and plot pdf
 figure
 subplot(2,2,1)
-histogram2(X, Y, x_axis, y_axis, 'Normalization', 'pdf')
+histogrhistogram2(X, Y, 100, 'Normalization', 'pdf')
+am2(X, Y, 100, 'Normalization', 'pdf')
 
 %// Compute and plot cdf
 subplot(2,2,2)
