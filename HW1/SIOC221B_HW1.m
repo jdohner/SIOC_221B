@@ -107,8 +107,8 @@ MAX2 = max(Y)
 %// Compute and plot pdf
 figure
 subplot(2,2,1)
-histogrhistogram2(X, Y, 100, 'Normalization', 'pdf')
-am2(X, Y, 100, 'Normalization', 'pdf')
+histogram2(X, Y, 100, 'Normalization', 'pdf')
+%histogram2(X, Y, 100, 'Normalization', 'pdf')
 
 %// Compute and plot cdf
 subplot(2,2,2)
