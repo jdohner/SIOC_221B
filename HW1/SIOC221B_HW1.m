@@ -1,4 +1,4 @@
-% SIOC 221B - HW 1
+% SIOC 221B - HW 1 & 2
 % January 15, 2018
 % Julia Dohner
 %
@@ -93,33 +93,45 @@ ylabel('\fontsize{12}probability')
 X = windspeed;
 Y = xco2;
 
-MIN1 = min(X)
-
-MAX1 = max(X)
-
-MIN2 = min(Y)
-
-MAX2 = max(Y)
-
-%x_axis = MIN1:1:MAX1; % Define edges of bins for x axis. Column vector
-%y_axis = MIN2:1:MAX2; % Same for y axis
-
-%// Compute and plot pdf
+% Compute and plot pdf
 figure
-subplot(2,2,1)
-histogram2(X, Y, 100, 'Normalization', 'pdf')
-%histogram2(X, Y, 100, 'Normalization', 'pdf')
+subplot(3,1,1)
+histogram2(X, Y, 10, 'Normalization', 'pdf')
+title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 10 Bins')
+xlabel('\fontsize{12}windspeed')
+ylabel('\fontsize{12}ppm co2')
 
-%// Compute and plot cdf
-subplot(2,2,2)
-histogram2(X, Y, x_axis, y_axis, 'Normalization', 'cdf')
+subplot(3,1,2)
+histogram2(X, Y, 100,'Normalization', 'pdf')
+title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 100 Bins')
+xlabel('\fontsize{12}windspeed')
+ylabel('\fontsize{12}ppm co2')
 
-figure
-subplot(2,2,3)
-histogram2(X, Y, x_axis, y_axis, 'Normalization', 'pdf')
+subplot(3,1,3)
+histogram2(X, Y, 1000,'Normalization', 'pdf')
+title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 1000 Bins')
+xlabel('\fontsize{12}windspeed')
+ylabel('\fontsize{12}ppm co2')
 
-%// Compute and plot cdf
-subplot(2,2,4)
-histogram2(X, Y, x_axis, y_axis, 'Normalization', 'cdf')
+% It seems as though the two are not correlated - that you have the same
+% amount of co2 over a range of windspeeds. It does seem that in areas of
+% lower windspeed there is a range in xco2 though, which does not appear at
+% higher windspeeds, where co2 remains between 385 and 400 ppm. I'd say
+% that they are dependent (windspeed certainly has some influence on local 
+% levels co2) but that they are not correlated. There's some relationship
+% between the two variables as seen when viewing the joint PDFs from above
+% (not a mess of points in the middle) but there's no positive or negative
+% relationship (the line of data is mostly flat), indicating that they're
+% not correlated.
 
-% calculate mean and moments of a few variables
+
+% calculate mean and a few moments of variables
+
+% 0th moment - mean xco2
+mean = mean(xco2);
+
+% 1st moment - variance xco2
+variance = var(xco2);
+
+% 2nd moment - skewness xco2
+skew = skewness(xco2);
