@@ -10,23 +10,40 @@ addpath(genpath('/Users/juliadohner/Documents/MATLAB/B_SIOC_221/OCO-2'));
 
 clear all;
 
+% data from September 6, 2014
+% date data: year, month, day, hour, minute, second, milisecond
+date = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/date');
 lat = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
 lon = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/longitude');
 % Column-averaged dry-air CO2 mole frac (includes bias correction), in ppm
 xco2 = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2');
 windspeed = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/windspeed');
 tcwv = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/tcwv'); % total column water vapor
+warnlvl = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/warn_level');
+flag = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2_quality_flag');
 
-for i = 1:length(windspeed)
+
+%% remove bad data
+
+for i = 1:length(xco2)
+    if warnlvl(i) > 15;
+        xco2(i) = NaN;
+    end
+    if flag(i) == 1;
+        xco2(i) = NaN;
+    end
     if windspeed(i) == -999999;
         windspeed(i) = NaN;
     end
     if tcwv(i) == -999999;
         tcwv(i) = NaN;
     end
+    
 end
 
 
+
+%%
 
 figure
 % co2 data by itself
@@ -38,10 +55,10 @@ ylabel('\fontsize{12}ppm')
 
 % lat vs lon
 subplot(2,2,3)
-plot(lat,lon,'.')
+plot(lon,lat,'.')
 title('\fontsize{14}Plot of Latitude vs. Longitude')
-xlabel('\fontsize{12}degrees latitude')
-ylabel('\fontsize{12}degrees longitude')
+xlabel('\fontsize{12}degrees longitude')
+ylabel('\fontsize{12}degrees latitude')
 
 % co2 vs lat
 subplot(2,2,2)
@@ -135,3 +152,4 @@ variance = var(xco2);
 
 % 2nd moment - skewness xco2
 skew = skewness(xco2);
+
