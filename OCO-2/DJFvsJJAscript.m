@@ -46,6 +46,8 @@ end
 DJF_NH_mean = nanmean(DJF_NH_xco2);
 DJF_SH_mean = nanmean(DJF_SH_xco2);
 
+%% winter figures
+
 figure
 % co2 data by itself
 subplot(2,1,1)
@@ -85,6 +87,8 @@ ylabel('\fontsize{12}probability')
 % pdf of NH
 figure
 histogram(DJF_NH_xco2,'Normalization','pdf')
+hold on
+line([DJF_NH_mean DJF_NH_mean], [0 0.45])
 title('\fontsize{14}Jan NH PDF of Xco2 Data')
 xlabel('\fontsize{12}ppm')
 ylabel('\fontsize{12}probability')
@@ -92,9 +96,26 @@ ylabel('\fontsize{12}probability')
 % pdf of SH
 figure
 histogram(DJF_SH_xco2,'Normalization','pdf')
+hold on
+line([DJF_SH_mean DJF_SH_mean], [0 0.6])
 title('\fontsize{14}Jan SH PDF of Xco2 Data')
 xlabel('\fontsize{12}ppm')
 ylabel('\fontsize{12}probability')
+
+
+% normal probability plot
+figure
+normplot(DJF_xco2)
+title('\fontsize{14}Jan PDF of Xco2 Data')
+legend('\fontsize{14}Jan PDF of Xco2 Data','Location','southeast')
+figure
+normplot(DJF_NH_xco2)
+title('\fontsize{14}Jan NH PDF of Xco2 Data')
+legend('\fontsize{14}Jan NH PDF of Xco2 Data','Location','southeast')
+figure
+normplot(DJF_SH_xco2)
+title('\fontsize{14}Jan SH PDF of Xco2 Data')
+legend('\fontsize{14}Jan SH PDF of Xco2 Data','Location','southeast')
 
 %% summer data
 
@@ -132,6 +153,9 @@ end
 
 JJA_NH_mean = nanmean(JJA_NH_xco2);
 JJA_SH_mean = nanmean(JJA_SH_xco2);
+
+
+%% summer figures
 
 figure
 % co2 data by itself
@@ -189,3 +213,47 @@ title('\fontsize{14}July SH PDF of Xco2 Data')
 xlabel('\fontsize{12}ppm')
 ylabel('\fontsize{12}probability')
 
+% normal probability plot
+figure
+normplot(JJA_xco2)
+title('\fontsize{14}July PDF of Xco2 Data')
+legend('\fontsize{14}July PDF of Xco2 Data','Location','southeast')
+figure
+normplot(JJA_NH_xco2)
+title('\fontsize{14}July NH PDF of Xco2 Data')
+legend('\fontsize{14}July NH PDF of Xco2 Data','Location','southeast')
+figure
+normplot(JJA_SH_xco2)
+title('\fontsize{14}July SH PDF of Xco2 Data')
+legend('\fontsize{14}July SH PDF of Xco2 Data','Location','southeast')
+
+%% read in geotiff data
+
+% EXAMPLE
+% [boston, R] = geotiffread('boston.tif');
+% figure
+% mapshow(boston, R);
+% axis image off
+
+% [forest, R] = geotiffread('boreal_forest_20km.tif');
+% forest2 = double(forest);
+% figure
+% mapshow(forest2,R);
+
+% lowest 10% of data
+Y = prctile(DJF_xco2,0.5);
+Z_xco2 = DJF_xco2;
+Z_lat = DJF_lat;
+Z_lon = DJF_lon;
+for i = length(DJF_xco2)
+    if DJF_xco2(i) > Y
+        Z_xco2(i) = nan;
+        Z_lat(i) = nan;
+        Z_lon(i) = nan;
+    end
+end
+
+figure
+plot(Z_lon,Z_lat,'.');
+
+        
