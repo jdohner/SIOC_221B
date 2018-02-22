@@ -51,13 +51,8 @@ m_co = (inv(G_co'*G_co)*G_co')*d_co;
 cov = ...
 (inv(G_co'*G_co)*G_co')*(3*eye(10))*(inv(G_co'*G_co)*G_co')';
 
+% vi - calcaulte resoluting error in vorticity, div and aav
 
-% consider equation (55) in LSF notes? "If the function beta(m) is linear,
-% alpha = beta(m) (eqn 53) can be rewritten as alpha = beta'*m;
-%alpha = m
-
-% vi - calcaulte resulting error in vort, div and aav
-% equation 56 in LSF notes
 
 
 %% question 2
