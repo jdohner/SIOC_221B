@@ -60,6 +60,7 @@ cov = ...
 % equation 56 in LSF notes
 
 
+
 %% question 2
 
 Ti = [2.5 0.0 4.0 -1.5];
