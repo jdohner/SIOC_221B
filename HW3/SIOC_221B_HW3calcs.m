@@ -1,153 +1,111 @@
 % hw 3 
 %
 % calcs to try with my data
+% using keeling co2 data (flask-sampled monthly averages) at mlo
+% code taken from A_SIOC_221/HW9/Dohner_SIOC221A_HW9_monthly.m
 
-% h5disp('oco2_LtCO2_140906_B7305Br_160713033252s.nc4');
+clear all; close all;
 
-addpath(genpath('/Users/juliadohner/Documents/MATLAB/B_SIOC_221/OCO-2'));
+%% load CO2 data
 
-clear all;
+dataMLO = fopen('monthly_data/monthly_flask_co2_mlo_JLD.txt');
+%dataMLO = fopen('halfhour_data/LJO_CO2_halfhourly_1958-1962.txt');
 
-% data from September 6, 2014
-% date data: year, month, day, hour, minute, second, milisecond
-date = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/date');
-lat = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/latitude');
-lon = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/longitude');
-% Column-averaged dry-air CO2 mole frac (includes bias correction), in ppm
-xco2 = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2');
-windspeed = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/windspeed');
-tcwv = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/Retrieval/tcwv'); % total column water vapor
-warnlvl = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/warn_level');
-flag = h5read('oco2_LtCO2_140906_B7305Br_160713033252s.nc4','/xco2_quality_flag');
+valsMLO = textscan(dataMLO, '%f %f', ...
+    'delimiter','\t');
+
+fclose(dataMLO);
+
+% format of .txt files is year, co2 value
+MLOyear = valsMLO{1};
+MLOco2 = valsMLO{2};
+
+%MLOco2 = detrend(MLOco2);
 
 
-%% remove bad data
-
-for i = 1:length(xco2)
-    if warnlvl(i) > 15;
-        xco2(i) = NaN;
+% remove flagged data
+for i = 1:length(MLOco2)
+    if MLOco2(i) == -99.99
+        MLOco2(i) = nan;
     end
-    if flag(i) == 1;
-        xco2(i) = NaN;
-    end
-    if windspeed(i) == -999999;
-        windspeed(i) = NaN;
-    end
-    if tcwv(i) == -999999;
-        tcwv(i) = NaN;
-    end
-    
 end
 
+% remove nan's
+% TODO: if time, go back and change this to a linear interpolation
+addpath('/Users/juliadohner/Documents/MATLAB/A_SIOC_221/HW9/Inpaint_nans/Inpaint_nans');
+MLOco2 = inpaint_nans(MLOco2);
 
 
-%%
-
-figure
-% co2 data by itself
-subplot(2,2,1)
-plot(xco2);
-title('\fontsize{14}Plot of Xco2 Data')
-xlabel('\fontsize{12}index')
-ylabel('\fontsize{12}ppm')
-
-% lat vs lon
-subplot(2,2,3)
-plot(lon,lat,'.')
-title('\fontsize{14}Plot of Latitude vs. Longitude')
-xlabel('\fontsize{12}degrees longitude')
-ylabel('\fontsize{12}degrees latitude')
-
-% co2 vs lat
-subplot(2,2,2)
-plot(lat,xco2,'.')
-title('\fontsize{14}Plot of Xco2 vs. Latitude')
-xlabel('\fontsize{12}degrees latitude')
-ylabel('\fontsize{12}ppm')
-
-% co2 vs lon
-subplot(2,2,4)
-plot(lon,xco2,'.')
-title('\fontsize{14}Plot of Xco2 vs. Longitude')
-xlabel('\fontsize{12}degrees longitude')
-ylabel('\fontsize{12}ppm')
-
-% pdf of co2 data
-figure
-histogram(xco2,'Normalization','pdf')
-title('\fontsize{14}PDF of Xco2 Data')
-xlabel('\fontsize{12}ppm')
-ylabel('\fontsize{12}probability')
-
-%% HW 2
-
-% calculate PDF with different bin widths
-figure
-subplot(3,1,1)
-histogram(xco2,10,'Normalization','pdf')
-title('\fontsize{14}PDF of Xco2 Data - 10 Bins')
-xlabel('\fontsize{12}ppm')
-ylabel('\fontsize{12}probability')
-
-subplot(3,1,2)
-histogram(xco2,100,'Normalization','pdf')
-title('\fontsize{14}PDF of Xco2 Data - 100 Bins')
-xlabel('\fontsize{12}ppm')
-ylabel('\fontsize{12}probability')
-
-subplot(3,1,3)
-histogram(xco2,1000,'Normalization','pdf')
-title('\fontsize{14}PDF of Xco2 Data - 1000 Bins')
-xlabel('\fontsize{12}ppm')
-ylabel('\fontsize{12}probability')
-
-% The PDF tells me the mean, the variance, and the skewedness of the data.
-
-% calculating a joint PDF of two of the variables:
-
-X = windspeed;
-Y = xco2;
-
-% Compute and plot pdf
-figure
-subplot(3,1,1)
-histogram2(X, Y, 10, 'Normalization', 'pdf')
-title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 10 Bins')
-xlabel('\fontsize{12}windspeed')
-ylabel('\fontsize{12}ppm co2')
-
-subplot(3,1,2)
-histogram2(X, Y, 100,'Normalization', 'pdf')
-title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 100 Bins')
-xlabel('\fontsize{12}windspeed')
-ylabel('\fontsize{12}ppm co2')
-
-subplot(3,1,3)
-histogram2(X, Y, 1000,'Normalization', 'pdf')
-title('\fontsize{14}Joint PDF of Xco2 vs. windspeed - 1000 Bins')
-xlabel('\fontsize{12}windspeed')
-ylabel('\fontsize{12}ppm co2')
-
-% It seems as though the two are not correlated - that you have the same
-% amount of co2 over a range of windspeeds. It does seem that in areas of
-% lower windspeed there is a range in xco2 though, which does not appear at
-% higher windspeeds, where co2 remains between 385 and 400 ppm. I'd say
-% that they are dependent (windspeed certainly has some influence on local 
-% levels co2) but that they are not correlated. There's some relationship
-% between the two variables as seen when viewing the joint PDFs from above
-% (not a mess of points in the middle) but there's no positive or negative
-% relationship (the line of data is mostly flat), indicating that they're
-% not correlated.
+% plot timeseries
+figure('name','Atmospheric CO2 Timeseries');
+plot(MLOyear,MLOco2, '.-');
+xlabel('\fontsize{14}year')
+ylabel('\fontsize{14}ppm')
+title('\fontsize{16}MLO Atmospheric CO2 Record')
+legend('\fontsize{12}Mauna Loa','location','northwest');
 
 
 % calculate mean and a few moments of variables
 
 % 0th moment - mean xco2
-mean = mean(xco2);
+mean = mean(MLOco2);
 
 % 1st moment - variance xco2
-variance = var(xco2);
+variance = var(MLOco2);
 
 % 2nd moment - skewness xco2
-skew = skewness(xco2);
+skew = skewness(MLOco2);
+
+% calculate the standard error
+
+sigma = variance^0.5;
+stderr = sigma/(length(MLOco2));
+
+% spectrum of data
+% three overlapping segments:
+N = length(MLOco2);
+Nseg = 4; % number of segments splitting data into
+segment_length = N/Nseg; % length of each chunk of data (aka segment length)
+M = segment_length/2;
+
+MLO_use=[reshape(MLOco2,segment_length,Nseg)];
+MLO_ft=fft(detrend(MLO_use).*(hann(segment_length)*ones(1,Nseg)));
+MLO_spec=sum(abs(MLO_ft(1:M+1,:)).^2,2)/N;
+MLO_spec(2:end)=MLO_spec(2:end)*2;
+% plot spectra
+frequency=(1:M+1)/(segment_length/12);
+frequency = frequency';
+figure('name','Power Spectra of CO2 Records');
+loglog(frequency, MLO_spec, '-b')
+xlabel('\fontsize{14}cycles per year')
+ylabel('\fontsize{14}ppm^2/cpy')
+title('\fontsize{16}Power Spectra of CO2 Record')
+legend('\fontsize{12}Mauna Loa Station', 'Location','northeast');
+
+
+
+% taking account of serial correlation
+% S0 = MLO_spec(1);
+% X = 10;
+% mserr = S0/(MLOyear(end)-MLOyear(1)); % units of years
+% 
+% % fit a model to your data
+% N = length(MLOco2);
+% M = N;
+% G = bsxfun(@power,MLOyear,0:M-1);
+% [m1,m2]=meshgrid(0:M-1,0:M-1);
+% Wm=(m1.*(m1-1).*m2.*(m2-1))./(m1+m2-3).*X.^(m1+m2-3);
+% Wm(isnan(Wm))=0;
+
+% fitting trend plus annual cycle
+t_MLO = MLOyear-MLOyear(1);
+cosMLO = cos(2*pi*MLOyear/(1)); 
+sinMLO = sin(2*pi*MLOyear/(1));
+G = [ones(length(MLOyear),1) t_MLO sinMLO cosMLO t_MLO.^2];
+m = inv(G'*G)*G'*MLOco2;
+
+d_calc = G*m;
+plot(MLOyear,d_calc,MLOyear,MLOco2);
+legend('MLO calculated','MLO observed')
+
 
