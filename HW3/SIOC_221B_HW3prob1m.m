@@ -78,7 +78,7 @@ aav_cons = m_cons(1) + m_cons(4);
 
 % v constr - covariance matrix 
 Gcons_g = (eye(6,6) - inv(G_co'*G_co)*F'*inv(F*inv(G_co'*G_co)*F')*F)*inv(G_co'*G_co)*G_co';
-Gcons_cov = Gcons_g*(sigma^2*eye(10))*(Gcons_g)';
+cons_cov = Gcons_g*(sigma^2*eye(10))*(Gcons_g)';
 
 
 % vi - calcaulte resulting error in vort, div and aav

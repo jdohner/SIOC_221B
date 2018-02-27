@@ -1,4 +1,5 @@
 % hw 3 
+% Julia Dohner
 %
 % calcs to try with my data
 % using keeling co2 data (flask-sampled monthly averages) at mlo
@@ -9,7 +10,6 @@ clear all; close all;
 %% load CO2 data
 
 dataMLO = fopen('monthly_data/monthly_flask_co2_mlo_JLD.txt');
-%dataMLO = fopen('halfhour_data/LJO_CO2_halfhourly_1958-1962.txt');
 
 valsMLO = textscan(dataMLO, '%f %f', ...
     'delimiter','\t');
@@ -31,7 +31,6 @@ for i = 1:length(MLOco2)
 end
 
 % remove nan's
-% TODO: if time, go back and change this to a linear interpolation
 addpath('/Users/juliadohner/Documents/MATLAB/A_SIOC_221/HW9/Inpaint_nans/Inpaint_nans');
 MLOco2 = inpaint_nans(MLOco2);
 
@@ -83,20 +82,6 @@ title('\fontsize{16}Power Spectra of CO2 Record')
 legend('\fontsize{12}Mauna Loa Station', 'Location','northeast');
 
 
-
-% taking account of serial correlation
-% S0 = MLO_spec(1);
-% X = 10;
-% mserr = S0/(MLOyear(end)-MLOyear(1)); % units of years
-% 
-% % fit a model to your data
-% N = length(MLOco2);
-% M = N;
-% G = bsxfun(@power,MLOyear,0:M-1);
-% [m1,m2]=meshgrid(0:M-1,0:M-1);
-% Wm=(m1.*(m1-1).*m2.*(m2-1))./(m1+m2-3).*X.^(m1+m2-3);
-% Wm(isnan(Wm))=0;
-
 % fitting trend plus annual cycle
 t_MLO = MLOyear-MLOyear(1);
 cosMLO = cos(2*pi*MLOyear/(1)); 
@@ -106,6 +91,6 @@ m = inv(G'*G)*G'*MLOco2;
 
 d_calc = G*m;
 plot(MLOyear,d_calc,MLOyear,MLOco2);
-legend('MLO calculated','MLO observed')
+legend('MLO modeled','MLO observed', 'Location','Northwest')
 
 

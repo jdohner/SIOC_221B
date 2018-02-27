@@ -2,6 +2,7 @@
 % julia dohner
 % question 3
 
+load data1.mat;
 
 % 8 datum (sound speed thru each row and column)
 % 16 model parameters
@@ -51,4 +52,7 @@ R = G_g*G;
 % it perfectly/have perfect resolution
 
 %plot 
+figure
 plot(1:size(R,1),R(6,:));
+figure
+contourf(R)
