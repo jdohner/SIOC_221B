@@ -37,29 +37,29 @@ title('y2 data after removing mean')
 
 % plot the fraction of total variance accounted for by each EOF
 figure('Name','y1 fraction of variances')
-plot(diag(S1.^2)/trace(S1.^2),'x'); % trace is sum of diagnoal
+plot(diag(S1.^2)/trace(S1.^2),'x','markersize',12); % trace is sum of diagnoal
 grid;
 title('fraction of total variance in y1 accounted for by EOFs')
 figure('Name','y2 fraction of variances')
-plot(diag(S2.^2)/trace(S2.^2),'x');
+plot(diag(S2.^2)/trace(S2.^2),'x','markersize',12);
 title('fraction of total variance in y2 accounted for by EOFs')
 grid;
 
 % plot the first two EOFs and amplitudes
 % amplitudes given by the rows of the matrix:
-amp1 = V1'*y1_dm;
+%amp1 = U1(:,1);
 figure('Name','y1 EOFs and amplitudes')
 subplot(2,2,1)
 plot(x,V1(:,1))
 title('first EOF of y1')
 subplot(2,2,2)
-plot(amp1(:,1))
+plot(t,U1(:,1)*S1(1,1))
 title('amplitude of first EOF of y1')
 subplot(2,2,3)
 plot(x,V1(:,2))
 title('second EOF of y1')
 subplot(2,2,4)
-plot(amp1(:,2))
+plot(t,U1(:,2)*S1(2,2))
 title('amplitude of second EOF of y1')
 
 % amp: plot(t,U(:,2))
@@ -69,13 +69,13 @@ subplot(2,2,1)
 plot(x,V2(:,1))
 title('first EOF of y2')
 subplot(2,2,2)
-plot(amp2(:,1))
+plot(t,U2(:,1)*S2(1,1))
 title('amplitude of first EOF of y2')
 subplot(2,2,3)
 plot(x,V2(:,2))
 title('second EOF of y2')
 subplot(2,2,4)
-plot(amp2(:,2))
+plot(t,U2(:,2)*S2(2,2))
 title('amplitude of second EOF of y2')
 
 

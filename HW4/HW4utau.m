@@ -11,20 +11,20 @@ load utau.mat;
 
 % eastward part real, northward part imaginary
 
-% determine the gain a for each depth z that minimizes the MSE
+% calculate gain (aka a)
+%a = mean(conj(tau).*u)/mean(conj(tau).*tau);
+a = (tau'*u)/(tau'*tau);
 
-% prediction of u (y) based on tau (x)
-% choose an optimum value for alpha (minimize MSE)
+% determine skill as a function of depth
+%skill = (mean(conj(tau).*u).*mean(conj(u).*tau))./(mean(conj(u).*u).*mean(conj(tau).*tau));
+skill = ((tau'*u)*(u'*tau))./((u'*u)*(tau'*tau));
 
-a = cov(u,tau);
 
-% a. determine the gain a for each depth z (11 depths) that minimizes MSE
-gain=zeros(11,1);
-for i = 1:length(z)
-    gain(i) = a;
-end
+% estimate Ekman depth and latitude of these data
+% De = (2*Av/f)^(1/2) where Av is the eddy viscosity and f is coriolis
+% e-folding scale; take the log of the gain?
+% use ekman spiral equation at surface?
 
-% b. determine the skill as a function of depth
 
 
 
