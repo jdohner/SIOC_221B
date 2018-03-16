@@ -16,8 +16,10 @@ load utau.mat;
 a = (tau'*u)/(tau'*tau);
 
 % determine skill as a function of depth
-%skill = (mean(conj(tau).*u).*mean(conj(u).*tau))./(mean(conj(u).*u).*mean(conj(tau).*tau));
-skill = ((tau'*u)*(u'*tau))./((u'*u)*(tau'*tau));
+for i = 1
+    skill(i) = ((tau'*u(i))*(u(i)'*tau))/((u(i)'*u(i))*(tau'*tau));
+end
+
 
 
 % estimate Ekman depth and latitude of these data

@@ -233,8 +233,7 @@ datumSPO = SPOco2(find(SPOyear == useYear));
 
 
 d=[datumPTB, datumSTP, datumMLO, datumCHR, datumSAM, datumNZD, datumSPO];
-avgD = mean(d);
-d = d-avgD;
+avgD = mean(
 scale=10;
 noise=0.1; % assuming 0 noise, physically unrealistic
 d=d(:);
@@ -270,21 +269,20 @@ numData = length(d);
    
   skill=diag(ct/cov*ct');
    x=ct/cov*d;
-   x = x+avgD;
 
-plot (lats,d+avgD,'x');
-%    
-% figure;
-% subplot(2,1,1)
-% plot(t,x),xlabel('t'),ylabel('x');
-% %legend('L=1' 'L=2' 'L=3' 'L=4' 'L=5' 'L=6' 'L=7' 'L=8' 'L=9' 'L=10');
-% title('Interpolations between input data points 0.5 and 1 with 0.1 N:S');
-% subplot(2,1,2)
-% plot(t,skill),xlabel('t'),ylabel('skill')
-% figure;
-% subplot(2,1,1)
-% plot(t,xt),xlabel('t'),ylabel('dxdt');
-% subplot(2,1,2)
-% plot(t,skillt),xlabel('t'),ylabel('skill-dxdt')
-% 
-% 
+
+   
+figure;
+subplot(2,1,1)
+plot(t,x),xlabel('t'),ylabel('x');
+%legend('L=1' 'L=2' 'L=3' 'L=4' 'L=5' 'L=6' 'L=7' 'L=8' 'L=9' 'L=10');
+title('Interpolations between input data points 0.5 and 1 with 0.1 N:S');
+subplot(2,1,2)
+plot(t,skill),xlabel('t'),ylabel('skill')
+figure;
+subplot(2,1,1)
+plot(t,xt),xlabel('t'),ylabel('dxdt');
+subplot(2,1,2)
+plot(t,skillt),xlabel('t'),ylabel('skill-dxdt')
+
+
