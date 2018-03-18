@@ -12,14 +12,16 @@ load utau.mat;
 % eastward part real, northward part imaginary
 
 % calculate gain (aka a)
-%a = mean(conj(tau).*u)/mean(conj(tau).*tau);
-a = (tau'*u)/(tau'*tau);
-
-% determine skill as a function of depth
-for i = 1
-    skill(i) = ((tau'*u(i))*(u(i)'*tau))/((u(i)'*u(i))*(tau'*tau));
+a = zeros(1,length(z));
+for i = 1:length(z)
+    a(i) = (tau(i)'*u(i))/(tau(i)'*tau(i));
 end
 
+% determine skill as a function of depth
+skill = zeros(1,length(z));
+for i = 1:length(z)
+    skill(i) = ((tau'*u(i))*(u(i)'*tau))/((u(i)'*u(i))*(tau'*tau));
+end
 
 
 % estimate Ekman depth and latitude of these data
@@ -27,6 +29,10 @@ end
 % e-folding scale; take the log of the gain?
 % use ekman spiral equation at surface?
 
+% Ekman spiral surface equation
+rho = 1025;
+De = (1+i)*z(2)/log(a(2)/a(1));
+depthEk = real(De);
 
-
-
+f = (1-i)/a(1)/rho/depthEk;
+lat = real(asind(real(f)/2/7.29E-5));

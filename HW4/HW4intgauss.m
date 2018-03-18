@@ -1,5 +1,5 @@
 % Dohner HW4
-% Question 1
+% Question 1 part a and b
 % Linear estimate interpolation using gaussian correlation.
 %
 % code adapted from Dan Rudnick

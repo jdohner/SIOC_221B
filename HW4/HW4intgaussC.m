@@ -1,11 +1,11 @@
-%HW4 intgauss part c
+% HW4 intgauss Question 1 part c
 %
 % code adapted from Dan Rudnick
 
 clear all; close all
 
 scale=1;
-noise=0;
+noise=0.1;
 t=(-5:0.1:5)';
 d = [0.5; 1];
 vals = zeros(19,1);

@@ -1,5 +1,7 @@
 % eof question of hw #3
+% julia dohner
 % (question 2)
+
 
 clear all
 
@@ -46,8 +48,6 @@ title('fraction of total variance in y2 accounted for by EOFs')
 grid;
 
 % plot the first two EOFs and amplitudes
-% amplitudes given by the rows of the matrix:
-%amp1 = U1(:,1);
 figure('Name','y1 EOFs and amplitudes')
 subplot(2,2,1)
 plot(x,V1(:,1))
@@ -78,20 +78,5 @@ subplot(2,2,4)
 plot(t,U2(:,2)*S2(2,2))
 title('amplitude of second EOF of y2')
 
-
-
-% [N,L] = size(y1);
-% neof = 11; %working with 5 eofs for now
-% 
-% y1 = y1';
-% [U,S,V] = svd(y1,'econ');
-% % columns of U are the EOFs
-% U=U(:,1:neof);
-% s=diag(S.^2)/trace(S.^2);
-% s=s(1:neof);
-%V=V(:,neof); % what happens here? V is weird dims
-
-
-% U is vectors of EOF's
 
 
