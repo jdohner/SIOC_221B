@@ -137,12 +137,16 @@ title('first EOF')
 subplot(2,2,2)
 plot(t,U(:,1)*S(1,1))
 title('amplitude of first EOF')
+ylabel('ppm')
+xlabel('year')
 subplot(2,2,3)
 plot(x,V(:,2))
 title('second EOF')
 subplot(2,2,4)
 plot(t,U(:,2)*S(2,2))
 title('amplitude of second EOF')
+ylabel('ppm')
+xlabel('year')
 
 
 %% suppose linear relationship 
@@ -230,15 +234,17 @@ datumCHR = CHRco2(find(CHRyear == useYear));
 datumSAM = SAMco2(find(SAMyear == useYear));
 datumNZD = NZDco2(find(NZDyear == useYear));
 datumSPO = SPOco2(find(SPOyear == useYear));
+datumLJO = LJOco2(find(LJOyear == useYear));
+%datumKER = KERco2(find(KERyear == useYear));
 
 
-d=[datumPTB, datumSTP, datumMLO, datumCHR, datumSAM, datumNZD, datumSPO];
+d=[datumPTB, datumLJO, datumMLO, datumCHR, datumSAM, datumNZD, datumSPO];
 avgD = mean(d);
 d = d-avgD;
 scale=10;
 noise=0.1; % assuming 0 noise, physically unrealistic
 d=d(:);
-lats = [71.3, 50.0, 19.5, 2.0, -14.2, -41.4, -90];
+lats = [71.3,  32.9, 19.5, 2.0, -14.2, -41.4, -90];
 t = (-90:1:71.3);
 skill=zeros(length(t),length(scale));
 x=zeros(size(skill));
@@ -272,10 +278,13 @@ figure
 plot(t,x)
 hold on
 plot(lats,d+avgD,'x');
+hold on
+plot([-100, 90], [avgD, avgD]) 
 title('Objective map of CO2 measurements along 155W vertical line')
 xlabel('latitude (south to north)')
 ylabel('CO2 in ppm')
-legend('objective map','observations')
+legend('objective map','observations','mean CO2 along transect','location','southwest')
+
 
 figure
 plot(t,skill)

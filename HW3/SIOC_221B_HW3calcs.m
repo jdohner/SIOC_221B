@@ -90,6 +90,7 @@ G = [ones(length(MLOyear),1) t_MLO sinMLO cosMLO t_MLO.^2];
 m = inv(G'*G)*G'*MLOco2;
 
 d_calc = G*m;
+figure
 plot(MLOyear,d_calc,MLOyear,MLOco2);
 legend('MLO modeled','MLO observed', 'Location','Northwest')
 

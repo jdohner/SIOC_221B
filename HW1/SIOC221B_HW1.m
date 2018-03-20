@@ -53,6 +53,17 @@ title('\fontsize{14}Plot of Xco2 Data')
 xlabel('\fontsize{12}index')
 ylabel('\fontsize{12}ppm')
 
+figure
+pcolor(lon, lat, xco2)
+caxis([-1 1])
+%colorbar
+[cmap] = cbrewer('div', 'RdBu', 50);
+colormap(cmap);
+h = colorbar;
+shading flat
+
+title('Along Channel Velocity CW(m/s)')
+
 % lat vs lon
 subplot(2,2,3)
 plot(lon,lat,'.')
